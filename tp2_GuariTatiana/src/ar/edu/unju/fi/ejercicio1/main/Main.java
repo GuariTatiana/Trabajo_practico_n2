@@ -1,68 +1,278 @@
 package ar.edu.unju.fi.ejercicio1.main;
 import java.util.ArrayList;
 import java.util.Scanner;
-import ar.edu.unju.fi.ejercicio1.model.*;
-
+import ar.edu.unju.fi.ejercicio1.model.Producto;
+import ar.edu.unju.fi.ejercicio1.model.Producto.Origenes;
+import ar.edu.unju.fi.ejercicio1.model.Producto.Categorias;
+import java.util.Iterator;
+import java.util.List;
 public class Main {
 
 public static void main(String[] args) {
-	
-		        ArrayList<Producto> listaProductos = new ArrayList<>();
-		        Scanner scanner = new Scanner(System.in);
+
+	List<Producto> productos=new ArrayList<Producto>();
+	Scanner sc=new Scanner(System.in);
+	int option=0;
+	boolean valido=false;
+	while(option!=4){
+		do {
+			valido=false;
+			System.out.print("\n*** MENU ***\n");
+			System.out.print("1) Crear Producto\n");
+			System.out.print("2) Mostrar productos\n");
+			System.out.print("3) Modificar producto\n");
+			System.out.print("4) Salir\n");
+			try {
+				System.out.print("Opcion: ");
+				option=Integer.parseInt(sc.next());
+				if(option<1||option>4) {
+					System.out.print("\nOpcion no valida\n");
+				}else {
+					valido=true;
+				}
+			}catch (NumberFormatException e) {
+				System.out.print("\nERROR: Ingrese un numero valido\n");
+			}
+		}while(valido==false);
+		switch(option) {
+		case 1:
+			crearProducto(productos,sc,valido);
+			break;
+		case 2:
+			mostrarProductos(productos);
+			break;
+		case 3:
+			modificarProducto(productos,sc,valido);
+			break;
+		}
+	}
+	sc.close();
+}
+private static void crearProducto(List<Producto> productos, Scanner sc, boolean valido) {
+	Producto producto=new Producto();
+	int opcion=0;
+	String codigo="", descripcion;
+	float precio=0;
+	valido=false;
+	while(valido==false){
+		valido=true;
+		System.out.print("Ingrese el codigo del Producto: ");
+		codigo=sc.next();
+		Iterator<Producto> productoExistente=productos.iterator();
+		while(productoExistente.hasNext()) {
+			if (productoExistente.next().getCodigo().equals(codigo)) {
+	           	valido=false;
+	        }
+	    }
+		if(valido==false) {
+			System.out.println("Codigo ya existente. Ingrese uno nuevo\n");
+		}
+	}
+	System.out.print("Ingrese la descripcion: ");
+	sc.nextLine();
+	descripcion=sc.nextLine();
+	valido=false;
+	while(valido==false){
+		System.out.print("Ingrese el precio del Producto: ");
+		try {
+			precio=Float.parseFloat(sc.next());
+			if(precio<0) {
+				System.out.println("Precio no valido");
+			}else {
+				valido=true;
+			}
+		}catch (NumberFormatException e) {
+			System.out.println("Ingrese un numero valido");
+		}
+	}
+	producto.setCodigo(codigo);
+	producto.setDescripcion(descripcion);
+	producto.setPrecioUnitario(precio);
+	valido=false;
+	do {
+		System.out.print("\n*** Origen de Fabricacion ***\n");
+		System.out.print("1) Argentina\n");
+		System.out.print("2) China\n");
+		System.out.print("3) Brasil\n");
+		System.out.print("4) Uruguay\n");
+		try {
+			System.out.print("Opcion: ");
+			opcion=Integer.parseInt(sc.next());
+			if(opcion<1||opcion>4) {
+				System.out.print("\nOpcion no valida\n");
+			}else {
+				valido=true;
+			}
+		}catch (NumberFormatException e) {
+			System.out.print("\nERROR: Ingrese un numero valido\n");
+		}
+	}while(valido==false);
+	switch(opcion) {
+	case 1:
+		producto.setOrigenFabricacion(Origenes.ARGENTINA);
+		break;
+	case 2:
+		producto.setOrigenFabricacion(Origenes.CHINA);
+		break;
+	case 3:
+		producto.setOrigenFabricacion(Origenes.BRASIL);
+		break;
+	case 4:
+		producto.setOrigenFabricacion(Origenes.URUGUAY);
+		break;
+	}
+	valido=false;
+	do {
+		System.out.print("\n*** Categoria ***\n");
+		System.out.print("1) Telefonia\n");
+		System.out.print("2) Informatica\n");
+		System.out.print("3) Electro Hogar\n");
+		System.out.print("4) Herramientas\n");
+		try {
+			System.out.print("Opcion: ");
+			opcion=Integer.parseInt(sc.next());
+			if(opcion<1||opcion>4) {
+				System.out.print("\nOpcion no valida\n");
+			}else {
+				valido=true;
+			}
+		}catch (NumberFormatException e) {
+			System.out.print("\nERROR: Ingrese un numero valido\n");
+		}
+	}while(valido==false);
+	switch(opcion) {
+	case 1:
+		producto.setCategoria(Categorias.TELEFONIA);
+		break;
+	case 2:
+		producto.setCategoria(Categorias.INFORMATICA);
+		break;
+	case 3:
+		producto.setCategoria(Categorias.ELECTRO_HOGAR);
+		break;
+	case 4:
+		producto.setCategoria(Categorias.HERRAMIENTAS);
+		break;
+	}
+	productos.add(producto);
+}
+
+private static void mostrarProductos(List<Producto> productos) {
+	System.out.println("\n**Productos**\n");
+	for (Producto producto : productos) {
+        System.out.println("Codigo: "+producto.getCodigo());
+        System.out.println("Descripcion: "+producto.getDescripcion());
+        System.out.println("Precio Unitario: "+producto.getPrecioUnitario()+"$");
+        System.out.println("Origen de Fabricacion: "+producto.getOrigenFabricacion());
+        System.out.println("Categoria: "+producto.getCategoria()+"\n");
+    }
+}
+
+private static void modificarProducto(List<Producto> productos, Scanner sc, boolean valido) {
+	String codigo, descripcion;
+	float precio=0;
+	int opcion=0;
+	System.out.print("\nIngrese el codigo del Producto a modificar: ");
+	codigo=sc.next();
+	valido=false;
+	for(Producto producto : productos) {
+		if(producto.getCodigo().equals(codigo)) {
+			valido=true;
+			System.out.print("\nProducto Encontrado\n");
+			System.out.print("Ingrese la descripcion: ");
+			sc.nextLine();
+			descripcion=sc.nextLine();
+			valido=false;
+			while(valido==false){
+				System.out.print("Ingrese el precio del Producto: ");
+				try {
+					precio=Float.parseFloat(sc.next());
+					if(precio<0) {
+						System.out.println("Precio no valido");
+					}else {
+						valido=true;
+					}
+				}catch (NumberFormatException e) {
+					System.out.println("Ingrese un numero valido");
+				}
+			}
+			producto.setDescripcion(descripcion);
+			producto.setPrecioUnitario(precio);
+			valido=false;
+			do {
+				System.out.print("\n*** Origen de Fabricacion ***\n");
+				System.out.print("1) Argentina\n");
+				System.out.print("2) China\n");
+				System.out.print("3) Brasil\n");
+				System.out.print("4) Uruguay\n");
+				try {
+					System.out.print("Opcion: ");
+					opcion=Integer.parseInt(sc.next());
+					if(opcion<1||opcion>4) {
+						System.out.print("\nOpcion no valida\n");
+					}else {
+						valido=true;
+					}
+				}catch (NumberFormatException e) {
+					System.out.print("\nERROR: Ingrese un numero valido\n");
+				}
+			}while(valido==false);
+			switch(opcion) {
+			case 1:
+				producto.setOrigenFabricacion(Origenes.ARGENTINA);
+				break;
+			case 2:
+				producto.setOrigenFabricacion(Origenes.CHINA);
+				break;
+			case 3:
+				producto.setOrigenFabricacion(Origenes.BRASIL);
+				break;
+			case 4:
+				producto.setOrigenFabricacion(Origenes.URUGUAY);
+				break;
+			}
+			valido=false;
+			do {
+				System.out.print("\n*** Categoria ***\n");
+				System.out.print("1) Telefonia\n");
+				System.out.print("2) Informatica\n");
+				System.out.print("3) Electro Hogar\n");
+				System.out.print("4) Herramientas\n");
+				try {
+					System.out.print("Opcion: ");
+					opcion=Integer.parseInt(sc.next());
+					if(opcion<1||opcion>4) {
+						System.out.print("\nOpcion no valida\n");
+					}else {
+						valido=true;
+					}
+				}catch (NumberFormatException e) {
+					System.out.print("\nERROR: Ingrese un numero valido\n");
+				}
+			}while(valido==false);
+			switch(opcion) {
+			
+			case 1:
+				producto.setCategoria(Categorias.TELEFONIA);
+				break;
+			case 2:
+				producto.setCategoria(Categorias.INFORMATICA);
+				break;
+			case 3:
+				producto.setCategoria(Categorias.ELECTRO_HOGAR);
+				break;
+			case 4:
+				producto.setCategoria(Categorias.HERRAMIENTAS);
+				break;
+			}
+		}
+	}
+	if(valido==false) {
+		System.out.print("\nProducto no encontrado\n");
+	}else {
+		System.out.print("\nProducto Modificado\n");
+	}
 		        
-		        int opcion = 0;
-		        while (opcion != 4) {
-		            System.out.println("Menú de opciones:");
-		            System.out.println("1 - Crear Producto");
-		            System.out.println("2 - Mostrar productos");
-		            System.out.println("3 - Modificar producto (sólo puede modificar: descripción, precio unitario, origen fabricación o categoría)");
-		            System.out.println("4 - Salir");
-		            System.out.print("Elija una opción: ");
-		            opcion = scanner.nextInt();
-		            
-		            switch (opcion) {
-		                case 1:
-		                    Producto producto = new Producto();
-		                    // Lógica para crear un nuevo producto
-		                    listaProductos.add(producto);
-		                    break;
-		                case 2:
-		                    // Lógica para mostrar los productos
-		                    for (Producto p : listaProductos) {
-		                        System.out.println(p.toString());
-		                    }
-		                    break;
-		                case 3:
-		                    // Lógica para modificar un producto
-		                    // Mostrar opciones de origen de fabricación y categoría
-		                    System.out.println("------ Origen de fabricación ------");
-		                    System.out.println("1 - Argentina");
-		                    System.out.println("2 - China");
-		                    System.out.println("3 - Brasil");
-		                    System.out.println("4 - Uruguay");
-		                    System.out.print("Elija una opción: ");
-		                    int opcionOrigen = scanner.nextInt();
-		                    
-		                    System.out.println("------ Categoría ------");
-		                    System.out.println("1 - Telefonía");
-		                    System.out.println("2 - Informática");
-		                    System.out.println("3 - Electro hogar");
-		                    System.out.println("4 - Herramientas");
-		                    System.out.print("Elija una opción: ");
-		                    int opcionCategoria = scanner.nextInt();
-		                    
-		                    // Lógica para modificar el producto seleccionado
-		                    break;
-		                case 4:
-		                    System.out.println("Saliendo del programa...");
-		                    break;
-		                default:
-		                    System.out.println("Opción inválida. Por favor, elija una opción válida.");
-		                    break;
-		            }
-		        }
-		        
-		        scanner.close();
  
 		
 	}

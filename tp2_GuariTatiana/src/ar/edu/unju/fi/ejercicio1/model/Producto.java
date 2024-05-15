@@ -2,30 +2,52 @@ package ar.edu.unju.fi.ejercicio1.model;
 
 public class Producto {
 	
-	 private String codigo;
-	    private String descripcion;
-	    private double precioUnitario;
-	    private OrigenFabricacion origenFabricacion;
-	    private Categoria categoria;
-	    
-	    public Producto() {
-	        // Constructor
-	    }
-	    
-	    // Getters y Setters
-	    
-	    @Override
-	    public String toString() {
-	        return "Producto [codigo=" + codigo + ", descripcion=" + descripcion + ", precioUnitario=" + precioUnitario
-	                + ", origenFabricacion=" + origenFabricacion + ", categoria=" + categoria + "]";
-	    }
-	    
-	    public enum OrigenFabricacion {
-	        ARGENTINA, CHINA, BRASIL, URUGUAY
-	    }
-	    
-	    public enum Categoria {
-	        TELEFONIA, INFORMATICA, ELECTROHOGAR, HERRAMIENTAS
-	    }
+	public enum Origenes{
+		ARGENTINA,CHINA,BRASIL,URUGUAY;
+	}
+	public enum Categorias{
+		TELEFONIA,INFORMATICA,ELECTRO_HOGAR,HERRAMIENTAS;
+	}
+	private String codigo;
+	private String descripcion;
+	private float precioUnitario;
+	private Origenes origenFabricacion;
+	private Categorias categoria;
+	
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	public float getPrecioUnitario() {
+		return precioUnitario;
+	}
+	public void setPrecioUnitario(float precioUnitario) {
+		this.precioUnitario = precioUnitario;
+	}
+	public Origenes getOrigenFabricacion() {
+		return origenFabricacion;
+	}
+	public void setOrigenFabricacion(Origenes origenFabricacion) {
+		this.origenFabricacion = origenFabricacion;
+	}
+	public Categorias getCategoria() {
+		return categoria;
+	}
+	public void setCategoria(Categorias categoria) {
+		this.categoria = categoria;
+	}
+	public void setDescripcion1(String descripcion2) {
+		// TODO Auto-generated method stub
 		
+	}
+	
+
 }
